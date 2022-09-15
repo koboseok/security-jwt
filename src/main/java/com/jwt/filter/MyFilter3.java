@@ -20,7 +20,7 @@ public class MyFilter3 implements Filter {
         // => id,pw 가 정상적으로 들어와서 로그인이 완료되면 토큰을 만들어주고 그걸 응답해준다.
         // 요청할 때 마다 header에 Authorization에 value 값으로 토큰을 가지고 온다.
         // 이때 토큰이 넘어오면 이 토큰이 내가 만든 토큰이 맞는지만 검증하면 된다. ( RSA, HS256 )
-        if (req.getMethod().equals("POST")) {
+        /*if (req.getMethod().equals("POST")) {
             System.out.println("request POST !");
             String headerAuth = req.getHeader("Authorization");
             System.out.println(headerAuth);
@@ -33,7 +33,9 @@ public class MyFilter3 implements Filter {
                 out.println("인증 안됨");
             }
 
-        }
+        }*/
+
+        chain.doFilter(req, res);
 
     }
 }

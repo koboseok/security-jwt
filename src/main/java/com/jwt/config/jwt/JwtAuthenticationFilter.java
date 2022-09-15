@@ -100,14 +100,14 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         // RSA 방식은 아니고 Hash 암호방식이다.
         // HMAC256 특징은 서버만 알고있는 secret을 가지고 있어야한다.
         String jwtToken = JWT.create()
-                .withSubject("cos-token") // 토큰 이름
-                .withExpiresAt(new Date(System.currentTimeMillis() + (60000 * 10))) // 만료시간 (10분) 토큰 만료시간은 길면 별로 .. ?
+                .withSubject(principalDetails.getUsername()) // 토큰 이름
+                .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.EXPIRATION_TIME)) // 만료시간 (10분) 토큰 만료시간은 길면 별로 .. ?
                 // withClaim => 비공개 클레임 넣고싶은 값 넣는다.
                 .withClaim("id",principalDetails.getUser().getId())
                 .withClaim("username",principalDetails.getUser().getUsername())
-                .sign(Algorithm.HMAC256("cos")); // 내 서버만 아는 고유값
+                .sign(Algorithm.HMAC256(JwtProperties.SECRET)); // 내 서버만 아는 고유값
 
         // Bearer(문자열) 뒤에 한칸 띄워야함.
-        response.addHeader("Authorization","Bearer " + jwtToken);
+        response.addHeader(JwtProperties.HEADER_STRING,JwtProperties.TOKEN_PREFIX + jwtToken);
     }
 }
